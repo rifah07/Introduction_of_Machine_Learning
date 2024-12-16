@@ -1,98 +1,106 @@
-import numpy as np
 import pandas as pd
-import tensorflow as tf
-from tensorflow.keras import layers, models
+import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Conv1D, MaxPooling1D, Flatten, Dense, Dropout
+import os
 
-# Load the dataset from a CSV file
-df = pd.read_csv('heart_rate_time_series.csv')
+# Load the dataset
+data = pd.read_csv('heart_rate_time_series.csv')
 
-# Assume the dataset has 'timestamp' and 'heart_rate' columns
-heart_rates = df['heart_rate'].values
+# Ensure the dataset has the correct columns
+if 'timestamp' not in data.columns or 'heart_rate' not in data.columns:
+    raise ValueError("The dataset must have 'timestamp' and 'heart_rate' columns.")
 
-# Normalize the heart rate values
-heart_rates = (heart_rates - heart_rates.mean()) / heart_rates.std()
+# Extract the heart rate data
+timestamps = data['timestamp']
+heart_rates = data['heart_rate'].values.reshape(-1, 1)
 
-# Create sequences for time series prediction
-def create_sequences(data, seq_length):
-    X = []
-    y = []
-    for i in range(len(data) - seq_length):
-        X.append(data[i:i+seq_length])
-        y.append(data[i+seq_length])
-    return np.array(X), np.array(y)
+# Normalize the heart rate data
+scaler = MinMaxScaler()
+heart_rates_scaled = scaler.fit_transform(heart_rates)
 
-seq_length = 10  # Length of the sequence
-X, y = create_sequences(heart_rates, seq_length)
+# Create sequences for time series
+sequence_length = 20  # Number of timesteps in each sequence
+X, y = [], []
+for i in range(len(heart_rates_scaled) - sequence_length):
+    X.append(heart_rates_scaled[i:i + sequence_length])
+    y.append(heart_rates_scaled[i + sequence_length])
 
-# Split the dataset into train and test sets
-train_size = int(len(X) * 0.8)
-X_train, X_test = X[:train_size], X[train_size:]
-y_train, y_test = y[:train_size], y[train_size:]
+X = np.array(X)
+y = np.array(y)
 
-# Reshape data for CNN input (samples, timesteps, features)
-X_train = X_train.reshape((X_train.shape[0], seq_length, 1))
-X_test = X_test.reshape((X_test.shape[0], seq_length, 1))
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Print the shapes to ensure they are correct
-print(f'X_train shape: {X_train.shape}')
-print(f'X_test shape: {X_test.shape}')
+# Check if a saved model exists
+model_path = 'cnn_heart_rate_model.h5'
+if os.path.exists(model_path):
+    print("Loading saved model...")
+    model = load_model(model_path)
+else:
+    print("Building and training a new model...")
+    # Build the CNN model
+    model = Sequential([
+        Conv1D(filters=32, kernel_size=3, activation='relu', input_shape=(sequence_length, 1)),
+        MaxPooling1D(pool_size=2),
+        Conv1D(filters=64, kernel_size=3, activation='relu'),
+        MaxPooling1D(pool_size=2),
+        Flatten(),
+        Dense(64, activation='relu'),
+        Dropout(0.2),
+        Dense(1)  # Regression output
+    ])
 
-# Build the CNN model with adjusted kernel sizes and pooling
-model = models.Sequential([
-    layers.Conv1D(filters=64, kernel_size=2, activation='relu', input_shape=(seq_length, 1)),
-    layers.MaxPooling1D(pool_size=2),
-    layers.Conv1D(filters=128, kernel_size=2, activation='relu'),
-    layers.MaxPooling1D(pool_size=2),
-    layers.Conv1D(filters=256, kernel_size=2, activation='relu'),
-    layers.Flatten(),
-    layers.Dense(100, activation='relu'),
-    layers.Dropout(0.5),  # Add dropout to prevent overfitting
-    layers.Dense(1)  # Regression output
-])
+    # Compile the model
+    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
-# Compile the model
-model.compile(optimizer='adam', loss='mean_squared_error')
+    # Train the model
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_test, y_test),
+        epochs=20,
+        batch_size=32
+    )
 
-# Train the model with more epochs and capture the history
-history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))
+    # Save the model
+    model.save(model_path)
+    print(f"Model saved to {model_path}")
 
-# Evaluate the model
-loss = model.evaluate(X_test, y_test)
-print(f'Test Loss: {loss}')
-
-# Function to plot training and validation loss
-def plot_loss(history):
-    plt.plot(history.history['loss'], label='Training Loss')
-    plt.plot(history.history['val_loss'], label='Validation Loss')
+    # Plot training vs validation performance
+    plt.figure(figsize=(12, 6))
+    plt.plot(history.history['loss'], label='Train Loss')
+    plt.plot(history.history['val_loss'], label='Test Loss')
+    plt.title('Training vs Testing Loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
-    plt.title('Training vs Validation Loss')
-    plt.show()
+    plt.grid()
+    plt.savefig('train_vs_test_loss.png')
+    print("The training vs testing loss plot has been saved as 'train_vs_test_loss.png'.")
 
-# Plot the training and validation loss
-plot_loss(history)
+# Evaluate the model on the test data
+test_loss, test_mae = model.evaluate(X_test, y_test)
+print(f"Test Loss: {test_loss}, Test MAE: {test_mae}")
 
-# Function to take user input and make predictions
-def predict_with_user_input():
-    print(f"Enter {seq_length} heart rate values for prediction (comma separated):")
+# Predict heart rate based on user input
+def predict_heart_rate():
+    print("Enter the last 20 heart rate values (separated by spaces):")
     user_input = input()
-    user_input = [float(x) for x in user_input.split(',')]
-    
-    if len(user_input) != seq_length:
-        print(f"Please enter exactly {seq_length} heart rate values.")
-        return
-    
-    # Normalize the user input using the same mean and std as the training data
-    user_input = (np.array(user_input) - heart_rates.mean()) / heart_rates.std()
-    
-    # Convert user input to numpy array and reshape for model prediction
-    user_input = user_input.reshape((1, seq_length, 1))
-    
-    # Make prediction
-    prediction = model.predict(user_input)
-    print(f"Predicted next heart rate value: {prediction[0][0]:.2f}")
+    try:
+        user_sequence = np.array([float(x) for x in user_input.split()])
+        if len(user_sequence) != sequence_length:
+            raise ValueError(f"Please enter exactly {sequence_length} values.")
+        user_sequence = user_sequence.reshape(-1, 1)
+        user_sequence_scaled = scaler.transform(user_sequence)
+        user_sequence_scaled = user_sequence_scaled.reshape(1, sequence_length, 1)
+        prediction_scaled = model.predict(user_sequence_scaled)
+        prediction = scaler.inverse_transform(prediction_scaled)
+        print(f"Predicted next heart rate value: {prediction[0][0]:.2f}")
+    except Exception as e:
+        print(f"Error: {e}")
 
-# Test the model with user input
-predict_with_user_input()
+# Call the prediction function
+predict_heart_rate()
