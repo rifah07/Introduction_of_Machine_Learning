@@ -85,6 +85,41 @@ else:
 test_loss, test_mae = model.evaluate(X_test, y_test)
 print(f"Test Loss: {test_loss}, Test MAE: {test_mae}")
 
+
+# Generate predictions for the test data
+y_pred = model.predict(X_test)
+
+# Inverse scale the predictions and actual values
+y_pred_rescaled = scaler.inverse_transform(y_pred)
+y_test_rescaled = scaler.inverse_transform(y_test)
+
+# Create a DataFrame for easy comparison
+comparison_df = pd.DataFrame({
+    'Actual': y_test_rescaled.flatten(),
+    'Predicted': y_pred_rescaled.flatten()
+})
+
+# Print the comparison data
+print(comparison_df.head())
+
+# Plot the actual vs predicted values
+plt.figure(figsize=(12, 6))
+plt.plot(y_test_rescaled, label='Actual Heart Rate')
+plt.plot(y_pred_rescaled, label='Predicted Heart Rate', linestyle='--')
+plt.title('Actual vs Predicted Heart Rate')
+plt.xlabel('Sample')
+plt.ylabel('Heart Rate')
+plt.legend()
+plt.grid()
+plt.savefig('actual_vs_predicted_heart_rate.png')
+plt.show()
+
+# Optionally, print some of the comparison
+print("First 5 testing vs predicted values:")
+print(comparison_df.head())
+
+
+
 # Predict heart rate based on user input
 def predict_heart_rate():
     print("Enter the last 20 heart rate values (separated by spaces):")
