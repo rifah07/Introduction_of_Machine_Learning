@@ -13,6 +13,7 @@ import torch.nn as nn
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
+import plotext as pltx
 
 # 1. Generate Sine Wave Dataset
 def create_sine_wave_data(seq_length, n_samples):

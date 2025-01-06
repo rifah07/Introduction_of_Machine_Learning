@@ -7,8 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1xTIb6RELI1wwliLZDs5upvgeOJyTduvQ
 """
 
-!pip install --upgrade scikit-learn scikeras[tensorflow]
-!pip install scikeras[tensorflow]
+#pip install --upgrade scikit-learn scikeras[tensorflow]
+#pip install scikeras[tensorflow]
 
 import numpy as np
 import pandas as pd
@@ -17,15 +17,16 @@ from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 import matplotlib.pyplot as plt
+import plotext as pltx
 
-from google.colab import files
+#from google.colab import files
 
 
 # Upload the dataset manually
-uploaded = files.upload()
+#uploaded = files.upload()
 
 # Assuming the dataset is named 'stock_prices.csv'
-df = pd.read_csv("HistoricalData_1736175120859.csv")
+df = pd.read_csv("HistoricalData.csv")
 print(df.head())
 
 data=df
@@ -133,8 +134,11 @@ y_test_actual = scaler.inverse_transform(dummy_test_data)[:, -1]
 
 # Plot results
 plt.figure(figsize=(12, 6))
-plt.plot(y_test_actual, label='Actual')
-plt.plot(predicted_actual, label='Predicted')
+pltx.plot(y_test_actual, label='Actual')
+pltx.plot(predicted_actual, label='Predicted')
 plt.legend()
-plt.title('LSTM Predictions vs Actual Data')
-plt.show()
+pltx.grid()
+pltx.title('LSTM Predictions vs Actual Data')
+pltx.show()
+#plt.savefig('LSTM Predictions vs Actual Data.png')
+#print("The training vs testing loss plot has been saved as 'LSTM Predictions vs Actual Data.png'.")
