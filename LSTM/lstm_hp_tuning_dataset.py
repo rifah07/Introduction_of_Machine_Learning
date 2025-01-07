@@ -19,6 +19,9 @@ from keras.layers import LSTM, Dense, Dropout
 import matplotlib.pyplot as plt
 import plotext as pltx
 
+import csv
+
+
 #from google.colab import files
 
 
@@ -91,30 +94,49 @@ param_grid = {
 best_loss = float('inf')
 best_params = None
 best_model = None
+import csv
 
-for optimizer in param_grid['optimizer']:
-    for dropout_rate in param_grid['dropout_rate']:
-        for units in param_grid['units']:
-            for batch_size in param_grid['batch_size']:
-                for epochs in param_grid['epochs']:
-                    print(f"Training with optimizer={optimizer}, dropout_rate={dropout_rate}, units={units}, batch_size={batch_size}, epochs={epochs}")
-                    model = build_lstm(optimizer=optimizer, dropout_rate=dropout_rate, units=units)
-                    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
-                    loss = model.evaluate(X_test, y_test, verbose=0)
-                    print(f"Loss: {loss}")
+# Define the CSV file name
+output_file = 'hyperparameter_results.csv'
 
-                    if loss < best_loss:
-                        best_loss = loss
-                        best_params = {
-                            'optimizer': optimizer,
-                            'dropout_rate': dropout_rate,
-                            'units': units,
-                            'batch_size': batch_size,
-                            'epochs': epochs
-                        }
-                        best_model = model
+# Open the file and create a CSV writer
+with open(output_file, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    
+    # Write the header row
+    writer.writerow(['optimizer', 'dropout_rate', 'units', 'batch_size', 'epochs', 'loss'])
+    
+    # Iterate over all hyperparameter combinations
+    for optimizer in param_grid['optimizer']:
+        for dropout_rate in param_grid['dropout_rate']:
+            for units in param_grid['units']:
+                for batch_size in param_grid['batch_size']:
+                    for epochs in param_grid['epochs']:
+                        print(f"Training with optimizer={optimizer}, dropout_rate={dropout_rate}, units={units}, batch_size={batch_size}, epochs={epochs}")
+                        
+                        # Build and train the model
+                        model = build_lstm(optimizer=optimizer, dropout_rate=dropout_rate, units=units)
+                        model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
+                        
+                        # Evaluate the model
+                        loss = model.evaluate(X_test, y_test, verbose=0)
+                        print(f"Loss: {loss}")
+                        # Write the hyperparameters and loss to the CSV file
+                        writer.writerow([optimizer, dropout_rate, units, batch_size, epochs, loss])
+                        if loss < best_loss:
+                            best_loss = loss
+                            best_params = {
+                                'optimizer': optimizer,
+                                'dropout_rate': dropout_rate,
+                                'units': units,
+                                'batch_size': batch_size,
+                                'epochs': epochs
+                            }
+                            best_model = model
 
 print("Best parameters found: ", best_params)
+                        
+ 
 
 # Predict
 predicted = best_model.predict(X_test)
