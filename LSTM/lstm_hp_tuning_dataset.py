@@ -95,10 +95,10 @@ def build_lstm(optimizer='adam', dropout_rate=0.2, units_per_layer=[15],num_laye
 param_grid = {
     'optimizer': ['adam', 'rmsprop'],  # Focus on two optimizers
     'dropout_rate': [0.2, 0.3],  # Limit to two dropout rates
-    'units_per_layer': [[10], [10, 50]],  # Use fewer configurations
+    'units_per_layer': [[10],[30], [50]],  # Use fewer configurations
     'batch_size': [16, 32],  # Use moderate batch sizes
     'epochs': [20],  # Start with fewer epochs
-    'num_layers': [5,7],  # Limit to 5-7 layers
+    'num_layers': [1,2,3,4,5],  # Limit layers
     'activation': ['relu', 'sigmoid']  # Stick to commonly effective activations
 }
 
@@ -181,6 +181,6 @@ pltx.plot(predicted_actual, label='Predicted')
 plt.legend()
 pltx.grid()
 pltx.title('LSTM Predictions vs Actual Data')
-pltx.show()
+#pltx.show()
 #plt.savefig('LSTM Predictions vs Actual Data.png')
 #print("The training vs testing loss plot has been saved as 'LSTM Predictions vs Actual Data.png'.")
