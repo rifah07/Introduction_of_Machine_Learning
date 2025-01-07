@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from keras.callbacks import EarlyStopping
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 import matplotlib.pyplot as plt
@@ -72,29 +73,39 @@ data_sequences, target_sequences = create_sequences(scaled_data, sequence_length
 X_train, X_test, y_train, y_test = train_test_split(data_sequences, target_sequences, test_size=0.2, random_state=42)
 
 # Define the LSTM model
-def build_lstm(optimizer='adam', dropout_rate=0.2, units=50):
+def build_lstm(optimizer='adam', dropout_rate=0.2, units_per_layer=[15],num_layers='5', activation='relu'):
     model = Sequential()
-    model.add(LSTM(units=units, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[2])))
-    model.add(Dropout(dropout_rate))
-    model.add(LSTM(units=units))
-    model.add(Dropout(dropout_rate))
-    model.add(Dense(1))
+    
+    # Add LSTM layers based on units_per_layer
+    for i, units in enumerate(units_per_layer):
+        return_seq = i < (len(units_per_layer) - 1)  # Only the last layer does not return sequences
+        if i == 0:
+            model.add(LSTM(units=units, return_sequences=return_seq, activation=activation,
+                           input_shape=(X_train.shape[1], X_train.shape[2])))
+        else:
+            model.add(LSTM(units=units, return_sequences=return_seq, activation=activation))
+        model.add(Dropout(dropout_rate))
+    
+    # Add output layer
+    model.add(Dense(1, activation='linear'))
     model.compile(optimizer=optimizer, loss='mean_squared_error')
     return model
 
-# Hyperparameter tuning manually
+
 param_grid = {
-    'optimizer': ['adam', 'rmsprop'],
-    'dropout_rate': [0.2, 0.3],
-    'units': [50, 100],
-    'batch_size': [16, 32],
-    'epochs': [50, 100]
+    'optimizer': ['adam', 'rmsprop'],  # Focus on two optimizers
+    'dropout_rate': [0.2, 0.3],  # Limit to two dropout rates
+    'units_per_layer': [[10], [10, 50]],  # Use fewer configurations
+    'batch_size': [16, 32],  # Use moderate batch sizes
+    'epochs': [20],  # Start with fewer epochs
+    'num_layers': [5,7],  # Limit to 5-7 layers
+    'activation': ['relu', 'sigmoid']  # Stick to commonly effective activations
 }
 
+#early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
 best_loss = float('inf')
 best_params = None
 best_model = None
-import csv
 
 # Define the CSV file name
 output_file = 'hyperparameter_results.csv'
@@ -104,35 +115,44 @@ with open(output_file, mode='w', newline='') as file:
     writer = csv.writer(file)
     
     # Write the header row
-    writer.writerow(['optimizer', 'dropout_rate', 'units', 'batch_size', 'epochs', 'loss'])
+    writer.writerow(['optimizer', 'dropout_rate', 'units_per_layer', 'batch_size', 'epochs','num_layers','activation', 'loss'])
     
     # Iterate over all hyperparameter combinations
     for optimizer in param_grid['optimizer']:
         for dropout_rate in param_grid['dropout_rate']:
-            for units in param_grid['units']:
+            for units_per_layer in param_grid['units_per_layer']:
                 for batch_size in param_grid['batch_size']:
                     for epochs in param_grid['epochs']:
-                        print(f"Training with optimizer={optimizer}, dropout_rate={dropout_rate}, units={units}, batch_size={batch_size}, epochs={epochs}")
-                        
-                        # Build and train the model
-                        model = build_lstm(optimizer=optimizer, dropout_rate=dropout_rate, units=units)
-                        model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
-                        
-                        # Evaluate the model
-                        loss = model.evaluate(X_test, y_test, verbose=0)
-                        print(f"Loss: {loss}")
-                        # Write the hyperparameters and loss to the CSV file
-                        writer.writerow([optimizer, dropout_rate, units, batch_size, epochs, loss])
-                        if loss < best_loss:
-                            best_loss = loss
-                            best_params = {
-                                'optimizer': optimizer,
-                                'dropout_rate': dropout_rate,
-                                'units': units,
-                                'batch_size': batch_size,
-                                'epochs': epochs
-                            }
-                            best_model = model
+                       for num_layers in param_grid['num_layers']:
+                            for activation in param_grid['activation']:
+                                print(f"Training with optimizer={optimizer}, dropout_rate={dropout_rate}, units_per_layer={units_per_layer}, "
+                                      f"batch_size={batch_size}, epochs={epochs}, num_layers={num_layers}, activation={activation}")
+                                
+                                # Build and train the model
+                                model = build_lstm(optimizer=optimizer, dropout_rate=dropout_rate, units_per_layer=units_per_layer, 
+                                                   num_layers=num_layers, activation=activation)
+                                model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
+                                
+                                # Evaluate the model
+                                loss = model.evaluate(X_test, y_test, verbose=0)
+                                print(f"Loss: {loss}")
+                                
+                                # Write the hyperparameters and loss to the CSV file
+                                writer.writerow([optimizer, dropout_rate, units_per_layer, batch_size, epochs, num_layers, activation, loss])
+                                
+                                # Update best parameters if loss improves
+                                if loss < best_loss:
+                                    best_loss = loss
+                                    best_params = {
+                                        'optimizer': optimizer,
+                                        'dropout_rate': dropout_rate,
+                                        'units_per_layer': units_per_layer,
+                                        'batch_size': batch_size,
+                                        'epochs': epochs,
+                                        'num_layers': num_layers,
+                                        'activation': activation
+                                    }
+                                    best_model = model
 
 print("Best parameters found: ", best_params)
                         
