@@ -3,8 +3,10 @@ import torch.nn.functional as F
 from torch_geometric.nn import GCNConv
 from torch_geometric.data import Data
 import matplotlib.pyplot as plt
+import networkx as nx
+from torch_geometric.utils import to_networkx
 
-#GNN model
+# Define the GNN model
 class GCN(torch.nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
         super(GCN, self).__init__()
@@ -23,15 +25,15 @@ class GCN(torch.nn.Module):
 
         return F.log_softmax(x, dim=1)
 
-#generate simple graph
+# Create a simple graph
 def create_sample_graph():
-    #edges of the graph (source and target)
+    # Define the edges of the graph (source, target)
     edge_index = torch.tensor([
-        [0, 1, 1, 2, 3, 3],  #source nodes
-        [1, 0, 2, 1, 4, 5]   #target nodes
+        [0, 1, 1, 2, 3, 3],  # Source nodes
+        [1, 0, 2, 1, 4, 5]   # Target nodes
     ], dtype=torch.long)
 
-    #node features(6 nodes, 3 features per node)
+    # Define node features (6 nodes, 3 features per node)
     x = torch.tensor([
         [1, 0, 0],
         [0, 1, 0],
@@ -41,26 +43,43 @@ def create_sample_graph():
         [0, 1, 1]
     ], dtype=torch.float)
 
-    #node labels (for classification)
+    # Define node labels (for classification)
     y = torch.tensor([0, 1, 0, 1, 0, 1], dtype=torch.long)
 
     return Data(x=x, edge_index=edge_index, y=y)
 
-# train the GNN model
+# Plot the graph using networkx
+def plot_graph(data, title, labels=None, node_color=None):
+    G = to_networkx(data, to_undirected=True)
+    pos = nx.spring_layout(G)
+
+    plt.figure(figsize=(8, 6))
+    nx.draw(G, pos, with_labels=True, node_color=node_color, cmap=plt.cm.Paired, node_size=500, edge_color="gray")
+
+    if labels is not None:
+        nx.draw_networkx_labels(G, pos, labels={i: labels[i] for i in range(len(labels))}, font_color='white')
+
+    plt.title(title)
+    plt.show()
+
+# Train the GNN model
 def train():
-    #create graph data
+    # Create the graph data
     data = create_sample_graph()
 
-    #define the model
+    # Define the model
     input_dim = data.x.size(1)
     hidden_dim = 16
-    output_dim = 2  #number of classes
+    output_dim = 2  # Number of classes
     model = GCN(input_dim, hidden_dim, output_dim)
 
-    #define optimizer
+    # Define the optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
 
-    #training loop
+    # Plot the input graph
+    plot_graph(data, title="Input Graph", labels=data.y.tolist(), node_color=data.y.tolist())
+
+    # Training loop
     model.train()
     for epoch in range(200):
         optimizer.zero_grad()
@@ -72,11 +91,14 @@ def train():
         if epoch % 20 == 0:
             print(f'Epoch {epoch}, Loss: {loss.item():.4f}')
 
-    #evaluate model
+    # Evaluate the model
     model.eval()
     _, pred = model(data).max(dim=1)
 
-    # Plot actual vs. predicted
+    # Plot the predicted graph
+    plot_graph(data, title="Predicted Graph", labels=pred.tolist(), node_color=pred.tolist())
+
+    # Plot actual vs. predicted comparison
     plt.figure(figsize=(8, 6))
     plt.plot(data.y.numpy(), label="Actual", marker='o')
     plt.plot(pred.numpy(), label="Predicted", marker='x')
@@ -86,9 +108,7 @@ def train():
     plt.legend()
     plt.grid(True)
     plt.show()
-    plt.savefig('actual_vs_predicted_node.png')
-    print("The Actual vs Predicted Node Classes plot has been saved as 'actual_vs_predicted_node.png'.")
 
-#run the training
+# Run the training
 if __name__ == "__main__":
     train()
