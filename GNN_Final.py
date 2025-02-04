@@ -1,114 +1,68 @@
 import torch
 import torch.nn.functional as F
 from torch_geometric.nn import GCNConv
-from torch_geometric.data import Data
-import matplotlib.pyplot as plt
 import networkx as nx
-from torch_geometric.utils import to_networkx
+import matplotlib.pyplot as plt
+from torch_geometric.data import Data
 
-# Define the GNN model
-class GCN(torch.nn.Module):
-    def __init__(self, input_dim, hidden_dim, output_dim):
-        super(GCN, self).__init__()
-        self.conv1 = GCNConv(input_dim, hidden_dim)
-        self.conv2 = GCNConv(hidden_dim, output_dim)
+#a simple Graph Neural Network
+class GNN(torch.nn.Module):
+    def __init__(self):
+        super(GNN, self).__init__()
+        self.conv1 = GCNConv(3, 16)
+        self.conv2 = GCNConv(16, 2)
 
     def forward(self, data):
         x, edge_index = data.x, data.edge_index
-
-        # First GCN layer with ReLU activation
         x = self.conv1(x, edge_index)
         x = F.relu(x)
-
-        # Second GCN layer
         x = self.conv2(x, edge_index)
-
         return F.log_softmax(x, dim=1)
 
-# Create a simple graph
+#generate a graph
 def create_sample_graph():
-    # Define the edges of the graph (source, target)
     edge_index = torch.tensor([
-        [0, 1, 1, 2, 3, 3],  # Source nodes
-        [1, 0, 2, 1, 4, 5]   # Target nodes
-    ], dtype=torch.long)
-
-    # Define node features (6 nodes, 3 features per node)
-    x = torch.tensor([
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1],
-        [1, 1, 0],
-        [1, 0, 1],
-        [0, 1, 1]
-    ], dtype=torch.float)
-
-    # Define node labels (for classification)
-    y = torch.tensor([0, 1, 0, 1, 0, 1], dtype=torch.long)
-
+        [0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 0],
+        [1, 0, 2, 1, 3, 2, 4, 3, 5, 4, 0, 5]
+    ], dtype=torch.long)  # Edge list
+    
+    x = torch.rand((6, 3))  # Random node features (6 nodes, 3 features each)
+    y = torch.tensor([0, 1, 0, 1, 0, 1], dtype=torch.long)  # Node labels
     return Data(x=x, edge_index=edge_index, y=y)
 
-# Plot the graph using networkx
-def plot_graph(data, title, labels=None, node_color=None):
-    G = to_networkx(data, to_undirected=True)
+#plot function for graph
+def plot_graph(data, title, labels=None):
+    G = nx.Graph()
+    edge_list = data.edge_index.t().tolist()
+    G.add_edges_from(edge_list)
+    
     pos = nx.spring_layout(G)
-
-    plt.figure(figsize=(8, 6))
-    nx.draw(G, pos, with_labels=True, node_color=node_color, cmap=plt.cm.Paired, node_size=500, edge_color="gray")
-
-    if labels is not None:
-        nx.draw_networkx_labels(G, pos, labels={i: labels[i] for i in range(len(labels))}, font_color='white')
-
+    plt.figure(figsize=(6, 4))
+    nx.draw(G, pos, with_labels=True, node_color=labels, cmap=plt.cm.coolwarm, node_size=500, edge_color='gray')
     plt.title(title)
     plt.show()
 
-# Train the GNN model
+#training the GNN
 def train():
-    # Create the graph data
     data = create_sample_graph()
-
-    # Define the model
-    input_dim = data.x.size(1)
-    hidden_dim = 16
-    output_dim = 2  # Number of classes
-    model = GCN(input_dim, hidden_dim, output_dim)
-
-    # Define the optimizer
+    model = GNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
-
-    # Plot the input graph
-    plot_graph(data, title="Input Graph", labels=data.y.tolist(), node_color=data.y.tolist())
-
-    # Training loop
-    model.train()
-    for epoch in range(200):
+    
+    plot_graph(data, "Input Graph", labels=data.y.numpy())
+    
+    for epoch in range(100):
+        model.train()
         optimizer.zero_grad()
         out = model(data)
         loss = F.nll_loss(out, data.y)
         loss.backward()
         optimizer.step()
-
-        if epoch % 20 == 0:
-            print(f'Epoch {epoch}, Loss: {loss.item():.4f}')
-
-    # Evaluate the model
+    
     model.eval()
-    _, pred = model(data).max(dim=1)
+    pred = model(data).argmax(dim=1).detach().numpy()
+    plot_graph(data, "Predicted Graph", labels=pred)
+    
+    print("Final Predictions:", pred)
 
-    # Plot the predicted graph
-    plot_graph(data, title="Predicted Graph", labels=pred.tolist(), node_color=pred.tolist())
-
-    # Plot actual vs. predicted comparison
-    plt.figure(figsize=(8, 6))
-    plt.plot(data.y.numpy(), label="Actual", marker='o')
-    plt.plot(pred.numpy(), label="Predicted", marker='x')
-    plt.xlabel("Node Index")
-    plt.ylabel("Class")
-    plt.title("Actual vs Predicted Node Classes")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-
-# Run the training
 if __name__ == "__main__":
     train()
