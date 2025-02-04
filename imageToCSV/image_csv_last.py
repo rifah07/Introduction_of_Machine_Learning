@@ -3,10 +3,6 @@ import pytesseract
 import pandas as pd
 import numpy as np
 
-# Set Tesseract path (only needed for Windows)
-# Uncomment and update the path if needed
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
 def preprocess_image(image_path):
     """Preprocess image for better OCR accuracy"""
     image = cv2.imread(image_path)
