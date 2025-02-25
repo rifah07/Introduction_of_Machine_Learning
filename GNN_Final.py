@@ -41,6 +41,8 @@ def plot_graph(data, title, labels=None):
     nx.draw(G, pos, with_labels=True, node_color=labels, cmap=plt.cm.coolwarm, node_size=500, edge_color='gray')
     plt.title(title)
     plt.show()
+    plt.savefig('GNN_Final.png')
+    print("The Graph is saved")
 
 #training the GNN
 def train():

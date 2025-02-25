@@ -106,3 +106,5 @@ for i, ax in enumerate(axes.flat):
     ax.imshow(fake_images[i], cmap='gray')
     ax.axis('off')
 plt.show()
+plt.savefig('GAN.png')
+print("The image is saved")
