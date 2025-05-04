@@ -1,0 +1,69 @@
+Employee List,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7,Unnamed: 8,Unnamed: 9,Unnamed: 10
+SL,Emp ID,Name,Designation,Department,Primary Email,Primary Phone,Join Date,Job Status,Experience,Salary
+1,0157730171,S M Ibrahim Sumon,Manager,Department of Production,smsumon06@yahoo.com,01722212168,01/09/2024,Full Time,0 Yr 8 mo,90000
+2,0114310154,Md. Abdul Hannan,Deputy Manager,Department of Production,hannanrak@yahoo.com,01914108256,03/07/2024,Full Time,0 Yr 9 mo,50000
+3,0264800080,Md. Rakib Hosen Mrida,Executive,Department of Production,rakibhosen.info@gmail.co,01736390017,14/06/2022,Full Time,2 Yr 10 mo,12000
+4,0148320111,Farzana Haque,Executive,Department of Production,linktofarzana@gmail.com,01852477778,01/07/2023,Full Time,1 Yr 10 mo,24000
+5,01447601061,Md. Tohidur Rahman,Probationary Officer,Department of Production,tohidurrahman74@gmail.com,01783496547,01/12/2024,Temporary,0 Yr 5 mo,22000
+6,0151920074,Md. Nazmul Hasan,Junior Executive,Department of Production,nazmulhasan4266@gmail.com,01580618775,18/05/2022,Full Time,2 Yr 11 mo,11000
+7,0107250122,Al Amin,Supervisor,Department of Production,6456420725,01322388955,01/10/2023,Full Time,1 Yr 7 mo,20000
+8,0132320023,Md. Jahirul Islam,Deputy Operator,Department of Production,262720963233232,01934731090,18/11/2024,Full Time,0 Yr 5 mo,18700
+9,01187700138,Jaynto Halder,Deputy Operator,Department of Production,7784471877,01735604026,16/03/2024,Full Time,1 Yr 1 mo,13500
+10,0128750022,Poritosh Chondro Bapari,Deputy Operator,Department of Production,2393582875,01726851464,16/03/2021,Full Time,4 Yr 1 mo,20400
+11,01735401042,Md. Helal  Uddin,Deputy Operator,Department of Production,8652357354,01727838799,05/11/2024,Probation,0 Yr 5 mo,13000
+12,0113420078,Md. Siddikur Rahman Razzak,Deputy Operator,Department of Production,8209981342,01717392365,02/06/2022,Full Time,2 Yr 11 mo,18700
+13,0118200032,Md. Sayful Islam,Senior Pharma Assistant,Department of Production,3313101820,01758679923,09/04/2021,Full Time,4 Yr 0 mo,11700
+14,0102860018,Sinthia,Senior Pharma Assistant,Department of Production,4661640286,01772037177,27/02/2021,Full Time,4 Yr 2 mo,11500
+15,0197770020,Parvin Akter,Senior Pharma Assistant (p),Department of Production,19907819511109800,01757168284,09/03/2021,Full Time,4 Yr 1 mo,11300
+16,0158740039,Md. Jalal Gazi,Senior Pharma Assistant,Department of Production,5123295874,01323441973,10/08/2021,Full Time,3 Yr 8 mo,10200
+17,0140580037,Md. Shoel Rana,Assistant Operator,Department of Production,5101594058,01728633722,01/08/2021,Full Time,3 Yr 9 mo,11150
+18,05070030,Ummeara Akter,Senior Pharma Assistant (p),Department of Production,9591610507,01794846915,13/05/2021,Full Time,3 Yr 11 mo,10250
+19,01829201073,Md. Kaium,Assistant Supervisor (Trainee),Department of Production,abdulkaiumsikder@gmail.com,01709235281,02/02/2025,Full Time,0 Yr 3 mo,10000
+20,0140120017,Md. Jahangeer Hawlader,Assistant Operator,Department of Production,8711764012,01759705517,27/02/2021,Full Time,4 Yr 2 mo,12550
+21,0139170019,Marufa  Akter,Senior Pharma Assistant (p),Department of Production,20047815588103900,01304355893,27/03/2021,Full Time,4 Yr 1 mo,10150
+22,0160480034,Md. Mirazul  Islam,Assistant Operator,Department of Production,6013036048,01300360392,13/04/2021,Full Time,4 Yr 0 mo,11450
+23,0142410033,Md. Firoz Alom,Assistant Operator,Department of Production,8661464241,01736464055,10/04/2021,Full Time,4 Yr 0 mo,14000
+24,0141250014,Sadia Akter,Senior Pharma Assistant (p),Department of Production,7801654125,01330959858,06/11/2020,Full Time,4 Yr 5 mo,11950
+25,0106370028,Mst. Jhumur Akter,Senior Pharma Assistant (p),Department of Production,7804870637,01742577037,04/04/2021,Full Time,4 Yr 0 mo,11250
+26,0100590038,Md. Sajib Molla,Senior Pharma Assistant,Department of Production,1999782902000059,01733494741,04/08/2021,Full Time,3 Yr 8 mo,11250
+27,0159230016,Md. Hasan,Pharma Assistant,Department of Production,2874285923,01771037177,10/02/2021,Full Time,4 Yr 2 mo,10300
+28,0221230049,Refat Nasrin,Executive,Department of Quality Assurance,refatantara19@gmail.com,01734587649,01/01/2022,Full Time,3 Yr 4 mo,20000
+29,0216570015,Md. Tanvir Noman,Executive,Department of Quality Assurance,tenvirbiochemistry@gmail.com,01796479765,01/01/2021,Full Time,4 Yr 4 mo,18000
+30,02786901060,Afsana  Jannat,Probationary Officer,Department of Quality Assurance,afsanajannat210@gmail.com,01716148273,01/12/2024,Temporary,0 Yr 5 mo,22000
+31,02511201028,M A Seam,Probationary Officer,Department of Quality Assurance,seam.pha.jnu13@gmail.com,01575420354,01/10/2024,Temporary,0 Yr 7 mo,20000
+32,03289301059,Afzal Ahmed Azim,Deputy Manager,Department of Quality Control,shawonbmbju40@gmail.com,01779292134,01/12/2024,Temporary,0 Yr 5 mo,60000
+33,0335620026,Md Mijanur Rahman,Assistant Manager,Department of Quality Control,mr2814555@gmail.com,01918831244,01/04/2021,Full Time,4 Yr 1 mo,40000
+34,0313480045,Md. Mamun Hossain,Executive,Department of Quality Control,mamunhossain6742@gmail.com,01734616742,01/11/2021,Full Time,3 Yr 6 mo,12000
+35,0316830128,Mohua Sarker,Executive,Department of Quality Control,mohuasarker13ku@gmail.com,01677595292,01/12/2023,Full Time,1 Yr 5 mo,25000
+36,03478301062,Bishal Sharker,Probationary Officer,Department of Quality Control,sharkerbishal96@gmail.com,01754175430,01/12/2024,Temporary,0 Yr 5 mo,24000
+37,0322920174,Nusrat Jahan Siddiqua,Probationary Officer,Department of Quality Control,nusrat.micro.jnu@gmail.com,01643053771,01/09/2024,Full Time,0 Yr 8 mo,24000
+38,0300890103,Md. Refat Hasan,Probationary Officer,Department of Quality Control,rh9360719@gmail.com,01779360719,12/12/2022,Full Time,2 Yr 4 mo,11000
+39,0356270173,Uttam Kumar,Probationary Officer,Department of Quality Control,konokdev100@gmail.com,01750636387,01/09/2024,Full Time,0 Yr 8 mo,22000
+40,0315470035,Md. Saidul Mridha,Senior Lab Attendant,Department of Quality Control,4211621547,01739947465,14/04/2021,Full Time,4 Yr 0 mo,11300
+41,04504801039,Partha Bikram Barai,Senior Executive,Department of Research and Development,partha_bikram@yahoo.com,01730752730,03/11/2024,Temporary,0 Yr 5 mo,30000
+42,0500900158,Md. Zahirul Islam,Assistant Manager,Department of Human Resource Management,zahirulcdhc107@gmail.com,01726574103,20/07/2024,Full Time,0 Yr 9 mo,18000
+43,06399201051,A B M Salahuddin,Assistant Manager,Department of Accounts and Finance,abm.salahuddin26@gmail.com,01866511811,11/11/2024,Temporary,0 Yr 5 mo,30000
+44,0653310125,Md Abu Bakkor Siddiq,Junior Executive,Department of Accounts and Finance,none,01722284928,11/11/2023,Full Time,1 Yr 5 mo,12000
+45,06145001026,Md. Mainul Islam,Probationary Officer,Department of Accounts and Finance,mainulislamniber@gmail.com,01795712339,01/10/2024,Probation,0 Yr 7 mo,16000
+46,07383501025,Md. Anowar Hossain,Deputy Chief Engineer,Department of Engineering and Works,anowar.gtbl@gmail.com,01314042903,22/09/2024,Full Time,0 Yr 7 mo,40000
+47,07002501096,Habib Al Ashad,Executive Engineer,Department of Engineering and Works,eee.engrashad@gmail.com,01307772979,09/03/2025,Full Time,0 Yr 1 mo,25000
+48,0799350110,Faysal Ahmed,Executive Engineer,Department of Engineering and Works,faysalnf2005@gmail.com,01616887996,01/06/2023,Full Time,1 Yr 11 mo,13500
+49,0751310025,Md. Gazi Shahadat Hossen,Master Technician,Department of Engineering and Works,6408555131,01823129955,01/04/2021,Full Time,4 Yr 1 mo,42000
+50,0788290009,Md. Rubel,Deputy Technician,Department of Engineering and Works,5101588829,01323014772,25/04/2020,Full Time,5 Yr 0 mo,16500
+51,0851041031,Md. Faruk Sikder,Delivery Assistant,Department of Sales and Distribution,7813895895104,01716005061,19/10/2024,Full Time,0 Yr 6 mo,12000
+52,0820390047,Md. Arif Billah,Assistant Manager,Department of Sales and Distribution,mdarifbillah17@gmail.com,01775531484,01/01/2022,Full Time,3 Yr 4 mo,29500
+53,08025101024,Md. Bayzid,Executive,Department of Sales and Distribution,emtiaj1952@gmail.com,01718476085,08/09/2024,Full Time,0 Yr 7 mo,18000
+54,0871040000,Md. Mahmudul Hasan,Probationary Officer,Department of Sales and Distribution,mdmahmudhasan917@gmail.com,01710901995,01/03/2025,Full Time,0 Yr 2 mo,10000
+55,08642501073,Md. Firozzaman,Probationary Officer,Department of Sales and Distribution,0,01767494466,01/01/2025,Probation/Trainee,0 Yr 4 mo,15000
+56,0853330109,Simon Islam Shifat,Junior Executive,Department of Sales and Distribution,simonislamshift@gmail.com,01301754922,26/05/2023,Full Time,1 Yr 11 mo,14000
+57,0865670193,Sujon Mali,Junior Executive,Department of Sales and Distribution,--,01742874067,01/01/2024,Full Time,1 Yr 4 mo,12300
+58,0870940007,Golam Saroar(Masud),Junior Executive,Department of Sales and Distribution,none,01745057152,01/12/2018,Full Time,6 Yr 5 mo,18000
+59,0994080101,Md. Aminur Hossain,General Manager Plant,Department of Commercial and Admin,ahkbd1167@gmail.com,01723519921,07/11/2022,Full Time,2 Yr 5 mo,125000
+60,0994110172,Md. Shahjahan,Assistant Manager,Department of Commercial and Admin,mdshahjahan38@gmail.com,01872828842,01/09/2024,Full Time,0 Yr 8 mo,37000
+61,0985160048,Md. Rakibul Hasan,Senior Executive,Department of Commercial and Admin,kazirakibulhasan1997@gmail.com,01710449689,01/01/2022,Full Time,3 Yr 4 mo,28000
+62,0992020123,Md. Nasir Uddin,Senior Executive,Department of Commercial and Admin,,01740790369,07/10/2023,Full Time,1 Yr 6 mo,19500
+63,09078901029,Md. Tasnimul Khaer,Probationary Officer,Department of Commercial and Admin,01721761633,01721761633,01/10/2024,Probation,0 Yr 7 mo,15000
+64,0903920040,Oli Ahmed,Associate Officer,Department of Commercial and Admin,none,01753202020,15/08/2021,Full Time,3 Yr 8 mo,15500
+65,0980320102,Md. Abdus Salam,Security Guard,Department of Commercial and Admin,4150968032,01764254965,01/12/2022,Full Time,2 Yr 5 mo,10000
+66,0945470118,Abu Bokor Siddiq,Driver,Department of Commercial and Admin,1015374547,01704852712,25/09/2023,Full Time,1 Yr 7 mo,12000
+67,11651700021,Mahinur Begum,Master Chef,Department of Foods and Lodging,2816376517,01752030009,14/03/2021,Full Time,4 Yr 1 mo,10200
